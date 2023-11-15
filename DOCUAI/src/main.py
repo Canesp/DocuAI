@@ -1,7 +1,8 @@
-import os 
+import os
+import keyring 
 
 def add_api_key(api_key: str):
-    os.environ["api_key"] = api_key
+    keyring.set_password("DOCUAI", "api_key", api_key)
 
 def main():
     print("Hello World!")
