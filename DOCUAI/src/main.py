@@ -1,6 +1,7 @@
 import os 
 
-os.environ["test"] = "test"
-t = os.getenv("test")
+def add_api_key(api_key: str):
+    os.environ["api_key"] = api_key
 
-print(t)
+def main():
+    print("Hello World!")
