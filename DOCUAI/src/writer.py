@@ -11,37 +11,42 @@ class Writer:
         self.assistant = self.client.beta.assistants.retrieve(self.assistant_id)
 
     def write(self) -> None:
-        print(self.assistant.id)
-        # files = []
-
-        # for file in self.get_files():
-            
-        #     files.append(self.client.files.create(file=open(file, "rb"), purpose="assistants").id)
-
-        # thread = self.client.beta.threads.create()
-
-        # message = self.client.beta.threads.messages.create(
-        #     thread_id=thread.id,
-        #     role="user",
-        #     content=f"Project name: {os.path.basename(os.getcwd())}",
-        # )
         
-        # run = self.client.beta.threads.runs.create(
-        #     thread_id=thread.id,
-        #     assistant_id=self.assistant_id,
-        # )
+        files = []
 
-        # run = self.client.beta.threads.runs.retrieve(
-        #     thread_id=thread.id,
-        #     run_id=run.id,
-        # )
+        for file in self.get_files():
+            
+            files.append(self.client.files.create(file=open(file, "rb"), purpose="assistants").id)
 
-        # messages = self.client.beta.threads.messages.list(
-        #     thread_id=thread.id,
-        # )
+        print(files)
 
-        # for message in reversed(messages.data):
-        #     print(message.content[0].text.value)
+        thread = self.client.beta.threads.create()
+
+        message = self.client.beta.threads.messages.create(
+            thread_id=thread.id,
+            role="user",
+            content=f"Project name: {os.path.basename(os.getcwd())}",
+            file_ids=files,
+        )
+        
+        run = self.client.beta.threads.runs.create(
+            thread_id=thread.id,
+            assistant_id=self.assistant.id,
+            instructions="",
+        )
+
+        while run.status in ["queued", "in_progress"]:
+            run = self.client.beta.threads.runs.retrieve(
+                thread_id=thread.id,
+                run_id=run.id,
+            )
+
+        messages = self.client.beta.threads.messages.list(
+            thread_id=thread.id,
+        )
+
+        for message in reversed(messages.data):
+            print(message.content[0].text.value)
 
     def get_files(self) -> list[str]:
         
