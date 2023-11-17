@@ -10,7 +10,7 @@ class Writer:
         self.assistant_id = "asst_NhtwTnQkISVeqVhzYXHB1Kzh"
         self.assistant = self.client.beta.assistants.retrieve(self.assistant_id)
 
-    def write(self) -> None:
+    def write(self, notes: str) -> None:
         
         files = []
 
@@ -25,7 +25,7 @@ class Writer:
         message = self.client.beta.threads.messages.create(
             thread_id=thread.id,
             role="user",
-            content=f"Project name: {os.path.basename(os.getcwd())}",
+            content=f"Project name: {os.path.basename(os.getcwd())}, Notes: {notes if notes else ''}.",
             file_ids=files,
         )
         
