@@ -2,7 +2,7 @@ import os
 import keyring
 import argparse
 from rich.console import Console
-from writer import Writer
+from DOCUAI.writer import Writer
 
 def find_file(file_name: str) -> bool:
     """Check if a file exists in the current directory."""
