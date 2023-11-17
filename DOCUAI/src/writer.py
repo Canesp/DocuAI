@@ -102,4 +102,3 @@ class Writer:
                     files.append(os.path.join(root, file))
 
         return files
-    
