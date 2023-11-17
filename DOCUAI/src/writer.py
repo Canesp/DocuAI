@@ -5,13 +5,33 @@ from openai import OpenAI
 class Writer:
 
     def __init__(self) -> None:
+        """
+        Initializes the Writer class.
+        - Retrieves the API key from keyring.
+        - Creates an OpenAI client with the retrieved API key.
+        """
+        
         self.api_key = keyring.get_password("DOCUAI", "api_key")
-        self.client = OpenAI(api_key=self.api_key)
-        self.assistant_id = "asst_NhtwTnQkISVeqVhzYXHB1Kzh"
-        self.assistant = self.client.beta.assistants.retrieve(self.assistant_id)
+        
+        # Check if the API key exists
+        if self.api_key:
+            self.client = OpenAI(api_key=self.api_key)
+            self.assistant_id = "asst_NhtwTnQkISVeqVhzYXHB1Kzh"
+            self.assistant = self.client.beta.assistants.retrieve(self.assistant_id)
+        else:
+            raise ValueError("API key not found. Please set the API key using 'keyring'.")
+
 
     def write(self, notes: str) -> bool:
-        
+        """
+        Writes notes into a README.md file using OpenAI.
+        - Retrieves relevant files in the current directory.
+        - Creates threads, messages, and runs in OpenAI.
+        - Downloads content to a README.md file if available.
+        Returns True if README.md file is generated, False otherwise.
+        """
+
+        # Retrieves files and performs OpenAI operations to generate README.md
         files = []
 
         for file in self.get_files():
@@ -55,6 +75,7 @@ class Writer:
             dowloaded_file = self.client.files.content(download_file_id)
             dowloaded_file = dowloaded_file.read()
 
+            # Writing downloaded file content to README.md
             with open("README.md", "wb") as f:
                 f.write(dowloaded_file)
 
@@ -62,9 +83,13 @@ class Writer:
         else:
             return False
 
-        
 
     def get_files(self) -> list[str]:
+        """
+        Gets a list of relevant files in the directory.
+        - Searches for specific file extensions in the current directory.
+        Returns a list of file paths.
+        """
         
         current_dir = os.getcwd()
 
