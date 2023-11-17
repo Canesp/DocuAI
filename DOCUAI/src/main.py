@@ -5,6 +5,16 @@ from rich.console import Console
 
 from writer import Writer
 
+def find_file(file_name: str) -> bool:
+
+    current_dir = os.getcwd()
+
+    for file in os.listdir(current_dir):
+        if file == file_name:
+            return True
+    
+    return False
+
 def add_api_key(args):
 
     console = Console()
@@ -33,9 +43,22 @@ def document(args):
         return
     
     console.print(f"[bold]{'─' * 35} Generating documentation {'─' * 35}[/bold]")
+
+    if find_file("README.md"):
+        console.print("[bold red]Warning:[/bold red] A README.md file already exists in this directory. Do you want to overwrite it? (Y/n)\n")
+        user_input = input("Input: ")
+
+        if user_input.lower() != "y":
+            console.print("[bold green]Success:[/bold green] README.md file not generated.")
+            return
     
     writer = Writer()
-    writer.write(notes=args.notes)
+    result = writer.write(notes=args.notes)
+
+    if result:
+        console.print("[bold green]Success:[/bold green] README.md file generated.")
+    else:
+        console.print("[bold red]Error:[/bold red] README.md file failed to be generated.")
 
 def main():
     

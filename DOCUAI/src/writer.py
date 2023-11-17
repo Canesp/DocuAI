@@ -10,7 +10,7 @@ class Writer:
         self.assistant_id = "asst_NhtwTnQkISVeqVhzYXHB1Kzh"
         self.assistant = self.client.beta.assistants.retrieve(self.assistant_id)
 
-    def write(self, notes: str) -> None:
+    def write(self, notes: str) -> bool:
         
         files = []
 
@@ -41,16 +41,12 @@ class Writer:
                 run_id=run.id,
             )
 
+        for file in files:
+            self.client.files.delete(file)
+
         messages = self.client.beta.threads.messages.list(
             thread_id=thread.id,
         )
-
-        for message in reversed(messages.data):
-            print(message.content[0].text.value)
-            print("Files:")
-            print(message.file_ids)
-            #download_file_id = message.file_ids
-            #print(download_file_id)
 
         message = messages.data[0]
 
@@ -61,15 +57,12 @@ class Writer:
 
             with open("README.md", "wb") as f:
                 f.write(dowloaded_file)
-        
+
+            return True
         else:
-            print("No files")
+            return False
 
-        #dowloaded_file = self.client.files.content(download_file_id)
-        #print(dowloaded_file)
-
-        for file in files:
-            self.client.files.delete(file)
+        
 
     def get_files(self) -> list[str]:
         
