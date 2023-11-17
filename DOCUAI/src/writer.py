@@ -47,6 +47,29 @@ class Writer:
 
         for message in reversed(messages.data):
             print(message.content[0].text.value)
+            print("Files:")
+            print(message.file_ids)
+            #download_file_id = message.file_ids
+            #print(download_file_id)
+
+        message = messages.data[0]
+
+        if message.file_ids != []:
+            download_file_id = message.file_ids[0]
+            dowloaded_file = self.client.files.content(download_file_id)
+            dowloaded_file = dowloaded_file.read()
+
+            with open("README.md", "wb") as f:
+                f.write(dowloaded_file)
+        
+        else:
+            print("No files")
+
+        #dowloaded_file = self.client.files.content(download_file_id)
+        #print(dowloaded_file)
+
+        for file in files:
+            self.client.files.delete(file)
 
     def get_files(self) -> list[str]:
         
@@ -62,5 +85,3 @@ class Writer:
 
         return files
     
-w = Writer()
-f = w.write()
