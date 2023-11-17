@@ -10,7 +10,7 @@ class Writer:
         - Retrieves the API key from keyring.
         - Creates an OpenAI client with the retrieved API key.
         """
-        
+
         self.api_key = keyring.get_password("DOCUAI", "api_key")
         
         # Check if the API key exists
@@ -19,7 +19,7 @@ class Writer:
             self.assistant_id = "asst_NhtwTnQkISVeqVhzYXHB1Kzh"
             self.assistant = self.client.beta.assistants.retrieve(self.assistant_id)
         else:
-            raise ValueError("API key not found. Please set the API key using 'keyring'.")
+            raise ValueError("API key not found. Please set the API key using 'docuai set_key'.")
 
 
     def write(self, notes: str) -> bool:
