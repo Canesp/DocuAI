@@ -1,77 +1,43 @@
-
-# Project Name: DocuAI
+# DocuAI
 
 ## Overview
-DocuAI is a project that involves interacting with the OpenAI API and performing file management functions. The provided files contain Python code that enables the interaction with OpenAI and the handling of files for documentation purposes.
+DocuAI is a powerful tool designed to automate the creation of documentation for projects. It leverages OpenAI's GPT models to generate comprehensive and concise README files based on the code and notes provided.
 
-## File Contents
-### 1. File: `file-pYA9xrMe37boWQtNDWHVZ6Jk`
-#### Content:
-```python
-import os
-import keyring
-from openai import OpenAI
+## Installation
+To install DocuAI, you need to have git and pip already installed on your machine. Follow these steps to get started:
 
-class Writer:
-
-    def __init__(self) -> None:
-        self.api_key = keyring.get_password("DOCUAI", "api_key")
-        self.client = OpenAI(api_key=self.api_key)
-        self.assistant_id = "asst_NhtwTnQkISVeqVhzYXHB1Kzh"
-        self.assistant = self.client.beta.assistants.retrieve(self.assistant_id)
-
-    def write(self) -> None:
-        
-        files = []
-
-        for file in self.get_files():
-        
-            files.append(self.client.files.create(file=open(file, "rb"), purpose="assistants").id)
-
-        # ... (code continuation)
-
-    def get_files(self) -> list[str]:
-        
-        current_dir = os.getcwd()
-
-        extensions = [".py", ".c", ".html", ".java", ".js", ".css", ".php", ".rb", ".ts"]
-        files = []
-
-        for root, dirs, file_names in os.walk(current_dir):
-            for file in file_names:
-                if file.endswith(tuple(extensions)) and file != "__init__.py":
-                    files.append(os.path.join(root, file))
-
-        return files
-
-w = Writer()
-f = w.write()
 ```
-#### Description:
-The file contains a Python class `Writer` that interacts with the OpenAI API. The `Writer` class has methods for initializing the API key, writing files, and obtaining a list of files in the current directory. The `write` method involves creating and managing files for the OpenAI assistant, including sending messages and retrieving file content.
-
-### 2. File: `file-RZxefmm15BizaAEiepEvvCGi`
-#### Content:
-```python
-import os
-import keyring 
-from openai import OpenAI
-
-def add_api_key(api_key: str):
-    keyring.set_password("DOCUAI", "api_key", api_key)
-
-def main():
-    print("Hello World!")
+pip install git+https://github.com//Canesp/DocuAI.git
 ```
-#### Description:
-This file contains Python code that includes a function for adding an API key and a main function that prints "Hello World!"
 
-## Project Usage
-The project involves utilizing the provided Python code to interact with the OpenAI API, manage files, and perform various tasks related to the documentation process.
+## Commands and Setup
 
-## Next Steps
-To utilize the code and interact with the OpenAI API, ensure that the necessary API key is configured. Additionally, the code can be further customized or extended as per specific requirements for file management and interaction with the OpenAI platform.
+### Setting API Key
+Before using DocuAI, you need to save your API key using the `set_key` command:
 
-## Additional Notes
-- Ensure that the required permissions and access to OpenAI API are in place before running the code.
-- Modify the code as needed to integrate with the existing project environment or documentation processes.
+```
+docuai set_key YOUR_API_KEY
+```
+
+Replace `YOUR_API_KEY` with your actual OpenAI API key.
+
+### Generating Documentation
+To generate documentation for your project, use the `document` command with the notes you wish to include:
+
+```
+docuai document "Your project notes here."
+```
+
+This will trigger the process that analyzes your project files and notes to generate a `README.md` file.
+
+## Files and Scripts Information
+The DocuAI package contains several Python scripts:
+
+- `setup.py`: Script that prepares the package for installation.
+- `Writer`: A class responsible for writing notes into a `README.md` file using OpenAI. It handles API key retrieval, file management, and interactions with the OpenAI client.
+- `main`: Contains the command-line interface for the package, allowing users to set API keys and initiate documentation generation.
+
+## Footnote
+This documentation was created using the DocuAI package. :sparkles:
+
+---

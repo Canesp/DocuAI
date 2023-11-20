@@ -38,14 +38,12 @@ class Writer:
             
             files.append(self.client.files.create(file=open(file, "rb"), purpose="assistants").id)
 
-        print(files)
-
         thread = self.client.beta.threads.create()
 
         message = self.client.beta.threads.messages.create(
             thread_id=thread.id,
             role="user",
-            content=f"Project name: {os.path.basename(os.getcwd())}, Notes: {notes if notes else ''}.",
+            content=f"Project name: {os.path.basename(os.getcwd())}, Notes: {notes if notes else ''}. Return README.md file as a downloadeable, with file id.",
             file_ids=files,
         )
         

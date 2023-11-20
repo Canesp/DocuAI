@@ -3,6 +3,7 @@ import keyring
 import argparse
 from rich.console import Console
 from DOCUAI.writer import Writer
+import time
 
 def find_file(file_name: str) -> bool:
     """Check if a file exists in the current directory."""
@@ -43,6 +44,7 @@ def document(args):
         console.print("[bold red]Error:[/bold red] No API key set. Use 'docuai set_key' to set an API key.")
         return
     
+    console.print()
     console.print(f"[bold]{'─' * 35} Generating documentation {'─' * 35}[/bold]")
 
     # Check if README.md file already exists
@@ -53,15 +55,25 @@ def document(args):
         if user_input.lower() != "y":
             console.print("[bold green]Success:[/bold green] README.md file not generated.")
             return
+        
+    console.clear()
+    console.print()
+    console.print(f"[bold]{'─' * 35} Generating documentation {'─' * 35}[/bold]")
+
+    console.print("Processing...")    
     
     # Generate README.md file using Writer class
     writer = Writer()
     result = writer.write(notes=args.notes)
 
+    console.print()
+    console.print(f"[bold]{'─' * 96}[/bold]")
     if result:
         console.print("[bold green]Success:[/bold green] README.md file generated.")
     else:
         console.print("[bold red]Error:[/bold red] README.md file failed to be generated.")
+
+    console.print()
 
 
 def main():
