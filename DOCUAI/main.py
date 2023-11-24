@@ -3,7 +3,6 @@ import keyring
 import argparse
 from rich.console import Console
 from DOCUAI.writer import Writer
-import time
 
 def find_file(file_name: str) -> bool:
     """Check if a file exists in the current directory."""
