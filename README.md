@@ -7,7 +7,7 @@ DocuAI is a powerful tool designed to automate the creation of documentation for
 To install DocuAI, you need to have git and pip already installed on your machine. Follow these steps to get started:
 
 ```
-pip install git+https://github.com//Canesp/DocuAI.git
+pip install it+https://github.com//Canesp/DocuAI.git#egg=DocuAI
 ```
 
 ## Commands and Setup
