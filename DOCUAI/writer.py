@@ -1,6 +1,8 @@
 import os
 import keyring
 from openai import OpenAI
+from nbconvert import PythonExporter
+import nbformat
 
 class Writer:
 
@@ -89,14 +91,47 @@ class Writer:
         Returns a list of file paths.
         """
         
+        # Get the current working directory
         current_dir = os.getcwd()
 
+        # List of standard file extensions to search for
         extensions = [".py", ".c", ".html", ".java", ".js", ".css", ".php", ".rb", ".ts"]
+
+        # List of special file extensions to handle differently
+        special_extensions = [".ipynb"]
+        
+        # List to store file paths
         files = []
 
+        # Traverse through the directory and its subdirectories
         for root, dirs, file_names in os.walk(current_dir):
             for file in file_names:
+                # Check for standard file extensions, excluding "__init__.py"
                 if file.endswith(tuple(extensions)) and file != "__init__.py":
                     files.append(os.path.join(root, file))
+                # Handle special case of .ipynb files
+                elif file.endswith(tuple(special_extensions)):
+                    # Convert .ipynb files to Python code
+
+                    # Initialize a PythonExporter
+                    exporter = PythonExporter()
+
+                    # Read the content of the .ipynb file
+                    with open(os.path.join(root, file), "r") as f:
+                        data = f.read()
+
+                    # Convert the .ipynb content to Python code
+                    code, _ = exporter.from_notebook_node(nbformat.reads(data, as_version=4))
+
+                    # Create a temporary directory to store the converted file
+                    tmp_dir = os.path.join(os.path.dirname(__file__), "tmp_files")
+                    file_path = os.path.join(tmp_dir, f"{file}.py")
+
+                    # Write the Python code into a new .py file
+                    with open(file_path, "w") as f:
+                        f.write(code)
+
+                    # Add the path of the temporary .py file to the list of files
+                    files.append(file_path)
 
         return files
