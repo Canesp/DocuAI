@@ -127,6 +127,10 @@ class Writer:
                     tmp_dir = os.path.join(os.path.dirname(__file__), "tmp_files")
                     file_path = os.path.join(tmp_dir, f"{file}.py")
 
+                    # Create the temporary directory if it does not exist
+                    if not os.path.exists(tmp_dir):
+                        os.mkdir(tmp_dir)
+
                     # Write the Python code into a new .py file
                     with open(file_path, "w") as f:
                         f.write(code)
