@@ -8,6 +8,7 @@ setup(
         'openai',
         'rich',
         'keyring',
+        'nbconvert',
     ],
     entry_points={
         'console_scripts': [
